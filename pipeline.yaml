@@ -1,0 +1,37 @@
+trigger:
+- none
+
+jobs:
+- job: BuildAndTest
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - checkout: self
+  - script: |
+      sudo apt-get update -y
+      sudo snap install flutter --classic
+    displayName: 'Install Flutter'
+  
+  - script: |
+      flutter --disable-telemetry
+      flutter packages get
+      # flutter test
+    displayName: 'Install Dependencies'
+  - script: |
+      flutter test
+    displayName: 'Test' 
+  - script: flutter build apk
+    displayName: 'Build apk'
+  
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)/build/app/outputs/flutter-apk'
+      Contents: '**/*.apk'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Copy APK to Artifact Staging'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'apk'
+      publishLocation: 'Container'
+    displayName: 'Publish Artifacts'
