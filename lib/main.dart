@@ -5,7 +5,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +92,7 @@ class _LoginState extends State<Login> {
                   },
                 ),
               ),
+              // Padding with increased thickness scrollbar
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
                 child: Center(
@@ -174,6 +175,21 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
+                    builder: (context) => MembersList(),
+                  ),
+                );
+              },
+              child: const Text("Go to Members List"),
+              key: Key('goToMembersListButton'), // Unique key for the Go to Members List button
+            ),
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
                     builder: (context) => NextPage(),
                   ),
                 );
@@ -200,6 +216,59 @@ class NextPage extends StatelessWidget {
           'Everything is working',
           style: TextStyle(fontSize: 24),
           key: Key('everythingIsWorkingText'), // Unique key for the Everything is Fine text
+        ),
+      ),
+    );
+  }
+}
+
+class MembersList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Members List'),
+        key: Key('membersListTitle'), // Add this line
+      ),
+      body: Scrollbar(
+        thickness: 12.0,
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: List.generate(30, (index) {
+            return ListTile(
+              title: Text('Member ${index + 1}'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MemberProfile(memberName: 'Member ${index + 1}'),
+                  ),
+                );
+              },
+              key: Key('member_$index'), // Unique key for each member
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
+class MemberProfile extends StatelessWidget {
+  final String memberName;
+
+  const MemberProfile({Key? key, required this.memberName}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile: $memberName'),
+      ),
+      body: Center(
+        child: Text(
+          'Profile details for $memberName',
+          style: TextStyle(fontSize: 24),
         ),
       ),
     );
