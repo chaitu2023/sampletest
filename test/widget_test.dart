@@ -32,11 +32,24 @@ void main() {
     // Verify that the Home Page is displayed.
     expect(find.byKey(const Key('welcomeToHomePageText')), findsOneWidget);
 
-    // Tap the Go to Next Page button.
-    await tester.tap(find.byKey(const Key('goToNextPageButton')));
+    // Tap the Go to Members List button.
+    await tester.tap(find.byKey(const Key('goToMembersListButton')));
     await tester.pumpAndSettle();
 
-    // Verify that the Next Page is displayed.
-    expect(find.byKey(const Key('everythingIsWorkingText')), findsOneWidget);
+    // Verify that the Members List is displayed.
+    expect(find.byKey(const Key('membersListTitle')), findsOneWidget);
+
+    // Get the total number of members in the list.
+    final int totalMembers = 30;
+
+    // Generate a random member index.
+    final int randomMemberIndex = DateTime.now().millisecondsSinceEpoch % totalMembers;
+
+    // Tap the random member in the list.
+    await tester.tap(find.text('Member 4'));
+    await tester.pumpAndSettle();
+
+    // Verify that the Member Profile is displayed.
+    expect(find.text('Profile: Member 4'), findsOneWidget);
   });
 }
